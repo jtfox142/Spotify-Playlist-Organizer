@@ -1,22 +1,25 @@
-const spotifyAuth = async () => {
+import fetchPlaylists from "./fetchPlaylists";
+
+const spotifyAuth = async (verifier) => {
   const clientId = "0de20ca76d804702ae63c24a2cec5c2a";
   const params = new URLSearchParams(window.location.search);
   const code = params.get("code");
   
   if (!code) {
-      redirectToAuthCodeFlow(clientId);
+       verifier = redirectToAuthCodeFlow(clientId)
   } else {
-      const accessToken = await getAccessToken(clientId, code);
-      return accessToken
+      const accessToken = await getAccessToken(clientId, code, verifier);
+      const playlists = await fetchPlaylists(accessToken)
+      dumpPlaylists(playlists)
   }
 
+  return verifier
 }
   
 async function redirectToAuthCodeFlow(clientId) {
-  const verifier = generateCodeVerifier(128);
-  const challenge = await generateCodeChallenge(verifier);
-
-  localStorage.setItem("verifier", verifier);
+  const verifier = generateCodeVerifier(128)
+  localStorage.setItem("verifier", verifier.toString())
+  const challenge = await generateCodeChallenge(verifier.toString());
 
   const params = new URLSearchParams();
   params.append("client_id", clientId);
@@ -36,7 +39,8 @@ function generateCodeVerifier(length) {
   for (let i = 0; i < length; i++) {
       text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
-  return text;
+
+  return text
 }
 
 async function generateCodeChallenge(codeVerifier) {
@@ -48,24 +52,28 @@ async function generateCodeChallenge(codeVerifier) {
       .replace(/=+$/, '');
 }
 
-async function getAccessToken(clientId, code) {
-  const verifier = localStorage.getItem("verifier");
+async function getAccessToken(clientId, code, verifier) {
 
-    const params = new URLSearchParams();
-    params.append("client_id", clientId);
-    params.append("grant_type", "authorization_code");
-    params.append("code", code);
-    params.append("redirect_uri", "http://127.0.0.1:5173/callback");
-    params.append("code_verifier", verifier);
+  const params = new URLSearchParams();
+  params.append("client_id", clientId);
+  params.append("grant_type", "authorization_code");
+  params.append("code", code);
+  params.append("redirect_uri", "http://127.0.0.1:5173/callback");
+  params.append("code_verifier", verifier);
+  console.log("Params: ", params.toString())
 
-    const result = await fetch("https://accounts.spotify.com/api/token", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: params
-    });
+  const result = await fetch("https://accounts.spotify.com/api/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: params
+  });
 
-    const { access_token } = await result.json();
-    return access_token;
+  const { access_token } = await result.json();
+  return access_token;
+}
+
+function dumpPlaylists(playlists) {
+  console.log("Playlists: ", playlists)
 }
 
  export default spotifyAuth

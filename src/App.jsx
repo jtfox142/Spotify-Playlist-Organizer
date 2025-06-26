@@ -20,18 +20,14 @@ function App() {
   }
 
   const UserInfo = () => {
-    const [playlistData, setPlaylistData] = useState('')
     const { token } = useContext(AuthContext)
 
-    const playlists = fetchPlaylists(token)
+    fetchPlaylists(token)
+    const playlist0 = JSON.parse(localStorage.getItem("playlists"))
 
-    useEffect(() => {
-      if(playlists)
-        setPlaylistData(playlists.items[0].name)
-    }, [playlists])
-
-    console.log("PlaylistsJSON: ", playlists)
-    console.log("PLAYLISTNAME: ", playlistData)
+    if(playlist0.items)
+      console.log("PlaylistsJSON: ", playlist0.items[0].name)
+    //console.log("PLAYLISTNAME: ", playlistData)
 
 
     return <>

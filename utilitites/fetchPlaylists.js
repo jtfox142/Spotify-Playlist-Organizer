@@ -7,7 +7,7 @@ const fetchPlaylists = async (token) => {
   const jsonData = await result.json();
   console.log("JSONDATA: ", jsonData)
 
-  return jsonData
+  localStorage.setItem("playlists", JSON.stringify(jsonData))
 
 }
 

@@ -1,19 +1,17 @@
 import fetchPlaylists from "./fetchPlaylists";
 
-const spotifyAuth = async (verifier) => {
+const spotifyAuth = async () => {
   const clientId = "0de20ca76d804702ae63c24a2cec5c2a";
   const params = new URLSearchParams(window.location.search);
   const code = params.get("code");
   
   if (!code) {
-       verifier = redirectToAuthCodeFlow(clientId)
+       redirectToAuthCodeFlow(clientId)
   } else {
       const accessToken = await getAccessToken(clientId, code, verifier);
       const playlists = await fetchPlaylists(accessToken)
       dumpPlaylists(playlists)
   }
-
-  return verifier
 }
   
 async function redirectToAuthCodeFlow(clientId) {

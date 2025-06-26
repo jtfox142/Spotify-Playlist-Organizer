@@ -1,5 +1,5 @@
 import './App.css'
-import { useEffect, useContext } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { AuthContext, AuthProvider, TAuthConfig, TRefreshTokenExpiredEvent } from "react-oauth2-code-pkce"
 //import spotifyAuth from '../utilitites/spotifyAuth'
 import fetchPlaylists from '../utilitites/fetchPlaylists'
@@ -20,17 +20,23 @@ function App() {
   }
 
   const UserInfo = () => {
-    const {token} = useContext(AuthContext)
+    const [playlistData, setPlaylistData] = useState('')
+    const { token } = useContext(AuthContext)
 
-    const playlistsJSON = fetchPlaylists(token)
-    console.log("PlaylistsJSON: ", playlistsJSON)
-    const playlist1 = JSON.stringify(playlistsJSON.total)
-    console.log("Playlist1: ", playlist1)
+    const playlists = fetchPlaylists(token)
+
+    useEffect(() => {
+      if(playlists)
+        setPlaylistData(playlists.items[0].name)
+    }, [playlists])
+
+    console.log("PlaylistsJSON: ", playlists)
+    console.log("PLAYLISTNAME: ", playlistData)
 
 
     return <>
         <h4>Access Token</h4>
-        <pre>{playlist1}</pre>
+        <pre>{token}</pre>
     </>
   }
 

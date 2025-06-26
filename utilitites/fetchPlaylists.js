@@ -4,7 +4,11 @@ const fetchPlaylists = async (token) => {
   });
   console.log("REQUEST MADE")
 
-  return await result.json();
+  const jsonData = await result.json();
+  console.log("JSONDATA: ", jsonData)
+
+  return jsonData
+
 }
 
 export default fetchPlaylists

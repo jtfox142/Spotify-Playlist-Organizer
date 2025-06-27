@@ -4,6 +4,19 @@ import { AuthContext, AuthProvider, TAuthConfig, TRefreshTokenExpiredEvent } fro
 //import spotifyAuth from '../utilitites/spotifyAuth'
 import fetchPlaylists from '../utilitites/fetchPlaylists'
 
+/*TODO
+
+  * Create a landing page that asks for the user's credentials/have spotify ask for user and password
+  * Error handling so that the user doesn't have to refresh the page
+  * Display a list of the user's playlists, allow them to select which one they want to organize
+    * As a first step, it would be easier to ask for the name of the playlist and query based on that
+  * Organize the selected playlist
+    * Query the tracks from the selected playlist
+    * Any playlists that share more than two subgenres, group together in an object
+    * Display up to three recommended new playlists, min size is 4 songs
+
+*/
+
 function App() {
   //const [token, setToken] = useState(0)
   //const [playlists, setPlaylists] = useState(0)

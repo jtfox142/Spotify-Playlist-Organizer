@@ -1,7 +1,6 @@
 import './App.css'
 import { useEffect, useState, useContext } from 'react'
 import { AuthContext, AuthProvider, TAuthConfig, TRefreshTokenExpiredEvent } from "react-oauth2-code-pkce"
-//import spotifyAuth from '../utilitites/spotifyAuth'
 import fetchPlaylists from '../utilitites/fetchPlaylists'
 
 /*TODO

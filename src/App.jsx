@@ -1,7 +1,10 @@
 import './App.css'
-import { useEffect, useState, useContext } from 'react'
-import { AuthContext, AuthProvider, TAuthConfig, TRefreshTokenExpiredEvent } from "react-oauth2-code-pkce"
 import fetchPlaylists from '../utilitites/fetchPlaylists'
+import { AuthContext, AuthProvider, TAuthConfig, TRefreshTokenExpiredEvent } from "react-oauth2-code-pkce"
+import { useContext} from "react"
+//import { ErrorProvider, ErrorComponent } from './ErrorBoundary'
+import { ErrorBoundary } from 'react-error-boundary'
+import Fallback from './Fallback'
 
 /*TODO
 
@@ -19,7 +22,6 @@ import fetchPlaylists from '../utilitites/fetchPlaylists'
 function App() {
   //const [token, setToken] = useState(0)
   //const [playlists, setPlaylists] = useState(0)
-
   const authConfig = {
     clientId: "0de20ca76d804702ae63c24a2cec5c2a",
     authorizationEndpoint: 'https://accounts.spotify.com/authorize',
@@ -33,31 +35,31 @@ function App() {
 
   const UserInfo = () => {
     const { token } = useContext(AuthContext)
+    if(token) {
+      fetchPlaylists(token)
+      const playlists = JSON.parse(localStorage.getItem("playlists"))
 
-    fetchPlaylists(token)
-    const playlist0 = JSON.parse(localStorage.getItem("playlists"))
-
-    if(playlist0.items)
-      console.log("PlaylistsJSON: ", playlist0.items[0].name)
-    //console.log("PLAYLISTNAME: ", playlistData)
-
+      if(playlists.items)
+        console.log("PlaylistName: ", playlists.items[0].name)
+    }
+    else {
+      console.log("Ruh ro raggy, we got an error!")
+    }
 
     return <>
-        <h4>Access Token</h4>
-        <pre>{token}</pre>
+      <>boop</>
+      {/*<h4>Access Token</h4>
+      <pre>{token}</pre>*/}
     </>
   }
 
-  /*useEffect(() => {
-    setPlaylists(fetchPlaylists(token))
-  }, [token])
-  console.log(playlists)*/
-
   return (
     <div>
-      <AuthProvider authConfig={authConfig}>
-        <UserInfo/>
-      </AuthProvider>
+      <ErrorBoundary FallbackComponent={Fallback}>
+        <AuthProvider authConfig={authConfig}>
+          <UserInfo/>
+        </AuthProvider>
+      </ErrorBoundary>
     </div>
   )
 }

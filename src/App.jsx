@@ -34,17 +34,17 @@ function App() {
   }
 
   const UserInfo = () => {
-    const { token } = useContext(AuthContext)
-    if(token) {
-      fetchPlaylists(token)
-      const playlists = JSON.parse(localStorage.getItem("playlists"))
+    const { token, error } = useContext(AuthContext)
 
-      if(playlists.items)
-        console.log("PlaylistName: ", playlists.items[0].name)
-    }
-    else {
-      console.log("Ruh ro raggy, we got an error!")
-    }
+    if(error)
+      throw new Error(error.toString())
+
+    fetchPlaylists(token)
+    const playlists = JSON.parse(localStorage.getItem("playlists"))
+
+    if(playlists.items)
+      console.log("PlaylistName: ", playlists.items[0].name)
+    
 
     return <>
       <>boop</>
@@ -55,7 +55,9 @@ function App() {
 
   return (
     <div>
-      <ErrorBoundary FallbackComponent={Fallback}>
+      <ErrorBoundary 
+        FallbackComponent={Fallback}
+      >
         <AuthProvider authConfig={authConfig}>
           <UserInfo/>
         </AuthProvider>

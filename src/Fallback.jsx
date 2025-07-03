@@ -1,4 +1,4 @@
-const Fallback = ({error, resetErrorBoundary}) => {
+const Fallback = ({error}) => {
   return (
     <div>
       <h1>Error:</h1>

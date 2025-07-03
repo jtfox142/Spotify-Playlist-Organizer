@@ -9,7 +9,7 @@ import Fallback from './Fallback'
 /*TODO
 
   * Create a landing page that asks for the user's credentials/have spotify ask for user and password
-  * Error handling so that the user doesn't have to refresh the page
+  * Figure out the error the necessitates refresh
   * Display a list of the user's playlists, allow them to select which one they want to organize
     * As a first step, it would be easier to ask for the name of the playlist and query based on that
   * Organize the selected playlist
@@ -55,9 +55,7 @@ function App() {
 
   return (
     <div>
-      <ErrorBoundary 
-        FallbackComponent={Fallback}
-      >
+      <ErrorBoundary FallbackComponent={Fallback}>
         <AuthProvider authConfig={authConfig}>
           <UserInfo/>
         </AuthProvider>
